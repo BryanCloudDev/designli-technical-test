@@ -1,6 +1,7 @@
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller, Post, Body } from '@nestjs/common';
 
+import { MappedSesEvent } from './dto/response-event-mapper.dto';
 import { EventMapperService } from './event-mapper.service';
 import { SesEventDto } from './dto/create-event-mapper.dto';
 
@@ -22,12 +23,13 @@ export class EventMapperController {
   @ApiResponse({
     status: 201,
     description: 'Event processed successfully.',
+    type: MappedSesEvent,
   })
   @ApiResponse({
     status: 400,
     description: 'Validation failed for the provided SES event payload.',
   })
-  create(@Body() sesEventDto: SesEventDto) {
+  create(@Body() sesEventDto: SesEventDto): MappedSesEvent[] {
     return this.eventMapperService.create(sesEventDto);
   }
 }

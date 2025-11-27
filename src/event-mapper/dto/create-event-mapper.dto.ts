@@ -2,6 +2,7 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
@@ -9,14 +10,18 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import { VerdictStatus } from '../enum/verdict-status.enum';
 
 // Documentation based in: https://docs.aws.amazon.com/ses/latest/dg/receiving-email-notifications-contents.html
 
 // ---------------- Verdict ----------------
 export class VerdictDto {
-  @ApiProperty({ example: 'PASS', description: 'Verdict status' })
-  @IsString()
-  status: string;
+  @ApiProperty({
+    example: VerdictStatus.PASS,
+    description: 'Verdict status',
+  })
+  @IsEnum(VerdictStatus)
+  status: VerdictStatus;
 }
 
 // ---------------- Action ----------------
