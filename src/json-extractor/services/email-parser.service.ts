@@ -8,6 +8,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { simpleParser } from 'mailparser';
+import { HttpService } from '@nestjs/axios';
 
 // Interface for JSON attachment content
 export interface JsonAttachmentContent {
@@ -17,6 +18,8 @@ export interface JsonAttachmentContent {
 @Injectable()
 export class EmailParserService {
   private readonly logger = new Logger(EmailParserService.name);
+
+  constructor(private readonly httpService: HttpService) {}
 
   async parse(fileName: string) {
     try {
@@ -35,16 +38,37 @@ export class EmailParserService {
             return parsedContent;
           }
         }
-
-        throw new BadRequestException('No JSON attachment found in the email.');
       }
+      this.logger.log('No JSON attachment found in the email');
 
       // Case 2 - Inside the body of the email as a link
+
+      const jsonUrlRegex = /https?:\/\/[^\s]+?\.json\b/;
+      const bodyText = parsedEmail.text || '';
+      const match = bodyText.match(jsonUrlRegex);
+
+      if (match && match[0]) {
+        const jsonUrl = match[0];
+        this.logger.log(`Found JSON URL: ${jsonUrl}`);
+
+        const fetchedJson = await this.httpService.axiosRef.get(jsonUrl);
+
+        if (fetchedJson.status !== 200) {
+          throw new BadRequestException(
+            `Failed to fetch JSON from URL: ${jsonUrl}`,
+          );
+        }
+
+        return fetchedJson.data as JsonAttachmentContent;
+      } else {
+        this.logger.log('No JSON link found in the email body');
+      }
 
       // Case 3 - Inside the body of the email as a link that leads to a webpage where there is a link
       // that leads to the actual JSON
     } catch (error) {
       if (error instanceof HttpException) throw error;
+      this.logger.error('Error parsing email:', error);
     }
   }
 
