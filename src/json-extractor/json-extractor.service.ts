@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreateJsonExtractorDto } from './dto/create-json-extractor.dto';
+import { EmailParserService } from './services/email-parser.service';
 
 @Injectable()
 export class JsonExtractorService {
-  create(createJsonExtractorDto: CreateJsonExtractorDto) {
-    return 'This action adds a new jsonExtractor';
+  constructor(private readonly emailParserService: EmailParserService) {}
+
+  parseEmail(query: string) {
+    return this.emailParserService.parse(query);
   }
 }
