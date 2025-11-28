@@ -7,8 +7,9 @@ import {
   Injectable,
   Logger,
 } from '@nestjs/common';
-import { simpleParser } from 'mailparser';
 import { HttpService } from '@nestjs/axios';
+import { simpleParser } from 'mailparser';
+import * as cheerio from 'cheerio';
 
 // Interface for JSON attachment content
 export interface JsonAttachmentContent {
@@ -66,6 +67,53 @@ export class EmailParserService {
 
       // Case 3 - Inside the body of the email as a link that leads to a webpage where there is a link
       // that leads to the actual JSON
+
+      const webpageUrlRegex = /https?:\/\/[^\s<>"]+/;
+      const bodyText1 = parsedEmail.text || '';
+      const match1 = bodyText1.match(webpageUrlRegex);
+
+      if (match1 && match1[0]) {
+        const webUrl = match1[0];
+        this.logger.log(`Found Web URL: ${webUrl}`);
+
+        const $ = await this.loadPage(webUrl);
+        const results: { href: string }[] = [];
+
+        $('a').each((i, el) => {
+          const href = $(el).attr('href');
+
+          if (!href || !href.endsWith('.json')) return;
+          const absoluteUrl = new URL(href, webUrl).toString();
+
+          results.push({
+            href: absoluteUrl,
+          });
+        });
+
+        if (results.length === 0) {
+          this.logger.log('No JSON link found on the webpage');
+          throw new BadRequestException(
+            'No JSON content found in the redirected page.',
+          );
+        }
+        // taking the first link that ends with .json
+
+        const fetchedJson = await this.httpService.axiosRef.get(
+          results[0].href,
+        );
+
+        if (fetchedJson.status !== 200) {
+          throw new BadRequestException(
+            `Failed to fetch JSON from URL: ${results[0].href}`,
+          );
+        }
+
+        return fetchedJson.data as JsonAttachmentContent;
+      }
+
+      this.logger.log('No link found in the email body');
+
+      throw new BadRequestException('No JSON content found in the email.');
     } catch (error) {
       if (error instanceof HttpException) throw error;
       this.logger.error('Error parsing email:', error);
@@ -87,5 +135,14 @@ export class EmailParserService {
       this.logger.error('Error reading file:', error);
       throw new BadRequestException('Could not read the specified file.');
     }
+  }
+
+  async loadPage(url: string) {
+    const response = await this.httpService.axiosRef.get<string>(url);
+    const data = response.data;
+
+    const $ = cheerio.load(data);
+
+    return $;
   }
 }
