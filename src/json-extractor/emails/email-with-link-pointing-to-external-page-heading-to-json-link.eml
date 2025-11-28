@@ -1,0 +1,108 @@
+Delivered-To: bportillo701@gmail.com
+Received: by 2002:a05:6a11:fb0d:b0:690:12cf:8b4f with SMTP id id13csp4627252pxc;
+        Thu, 27 Nov 2025 19:33:10 -0800 (PST)
+X-Received: by 2002:a05:690c:6f02:b0:783:fa30:b783 with SMTP id 00721157ae682-78a8b576ba7mr193891237b3.69.1764300789827;
+        Thu, 27 Nov 2025 19:33:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1764300789; cv=none;
+        d=google.com; s=arc-20240605;
+        b=VAGQjXJ11wcxOk2vkxEl9IKwnQFGgMctWQ8gf7Vnm0SihX0Ov9fhPao5wW2pKLxKxT
+         wOg5a9OOEn4ULcKNmf3xwDANlQjxiVRPuft20tWAW2nY/afOpvBAeHfn1llHvnm1YlD0
+         KhTc1dDJKLDN1oKzpc4aFczwU2Ve+Nrd7+TJhVGpGLHP7gnCxkwZ14tZGsLx0r+yck37
+         hdTXWw5wet2pVy+9m2LZ+4OTQ01eFtDErCaIurqo+kBWaJpNg7Gr1ij4x717nuZKDOsW
+         Xt5OO9wwWFmahG0R9NPG8Irv+hdvjRQ+eKFiDB1NcM9HlSiyVaoYe3zF7pFZ8E1tQcFG
+         0new==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=nkRA9cCezT1y+PChLc+yg6mQnGoR92CNwikaaPxFksk=;
+        fh=9n0C+n+xWeCbTFyJySNdfZMwzd5BEl2gz/xFy5/Y9Lg=;
+        b=A70uGUBMqq00IP1A5yoCKwcGAMfevJTPof4DZKgJ3vhyAerlIdBox8sEVOUdS3tSZF
+         GLeMleaKGYnZOcYSZ6hD7Xn56eA5IN4fzSxOeGpwJXrjRXM6Tr6k8G4oVALtI2Ff5FC+
+         MUSjiIGKjKRdMy1YLq7HOUna1cHBhDtWT39GolgjjbJGz9K6K7UFlXnHht98mdE7w1qt
+         rdEK4vdf6mOtOGLorMDa+M+xiWcPQQN2vf7waPGt4rm5/XD57jh5vQhDPoxpCEewQ8ND
+         eG1uwDIGbBSUoyHu2AionlrEtrGQMS4OLzLCY0iw7CwZrRm22EWr0bLFSW2rgXGX0rDj
+         HbHg==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20230601 header.b=gz+sqz1h;
+       spf=pass (google.com: domain of bryanportillodev@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=bryanportillodev@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+Return-Path: <bryanportillodev@gmail.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id 00721157ae682-78ad0d4714csor13630347b3.2.2025.11.27.19.33.09
+        for <bportillo701@gmail.com>
+        (Google Transport Security);
+        Thu, 27 Nov 2025 19:33:09 -0800 (PST)
+Received-SPF: pass (google.com: domain of bryanportillodev@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20230601 header.b=gz+sqz1h;
+       spf=pass (google.com: domain of bryanportillodev@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=bryanportillodev@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764300789; x=1764905589; dara=google.com;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nkRA9cCezT1y+PChLc+yg6mQnGoR92CNwikaaPxFksk=;
+        b=gz+sqz1hGZIMDb7qQLeYcKRfSIZpxeVOitE/bthZeoj7FMidcvdiWOgZIJMYaT2Nua
+         IGxi1e0LFrpxqA3mrpMDBml7h1KlceDN3DYCiJf1R496XNnTKssfp0Pq3sogOWn8bO88
+         JslQFXK9ZNyKq6E8k0t3ReQHag3HG5z4S3Wd1w9bdIDGbt+Ho3ttbrUule2si9g9kaoG
+         GX/r8mzBg9nZGmrmJ8CKFnB5GedhYhs+xC0ZJOUPmmx4eRMYmqOKFyLTUUl+uFqpuEqt
+         TT/XeZlWDKY6ezre2Uvu+UpKGEmZ02ExDCzedjEAUqe8/JhAj1JTyfA6PsjBgsN/e9BZ
+         RPdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764300789; x=1764905589;
+        h=to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nkRA9cCezT1y+PChLc+yg6mQnGoR92CNwikaaPxFksk=;
+        b=Ml5nj/1Z9mnjIpjSXq5BYSV9bgi37H5S3O+GAuxU3Cai7SS2TLsPtw716YUIvu/fEX
+         Hrd6mFdJtvMYLapPaDL6PRh1bW8yyxz/ivan0JukOtFI++CaiWG9ytR4k3OOwGxwnY+W
+         TwT27xHOCurFVip2Py+DrElBGk2cWHn//d6MOn1N3Jhyx6ejuMK7wOe/wd5a6rAG3Lss
+         LZSZANlluGR7BTsFuOuOGqrcai+kVX1LB9vBjfG40Y09qJSImUHOqC1HiJT6SykPKsRj
+         JRc7q68ddlQJSyiG1rr4ovfzS5BzhnDMsDWyz5q3QCD8dLwkvNyxg5Sz3ABpEMnCTQMJ
+         wKgg==
+X-Gm-Message-State: AOJu0YzdRIh5YU34M0T9hG09OCpTNPvMLu/163pFNtnqUMThJENLF7bk
+	uU9TsHKjKpo2ieEk4ikqjCop0SMwAGjseMt6V2j94qLaNpufMGs96J4NIq/HBMN4HPeRwTXRCKo
+	hBne5z5htLt1H4/VzY7lpl8GjiCGxeEqWOZaw
+X-Gm-Gg: ASbGncsaVULKsFIdkvSBrCiSbmPii3oz1pvIRBCzSfQJOddoueF92s5CsyBoYZgOr3l
+	tMZ6RIGlfFQIACAWg/sBp+zWXD4UXAubtoVNLepmPsMiIvod0XtA3iSEWmpzv8wO1uB3/LE5Kmj
+	TBO6hWzOlx3cuYseYe0hqb5H1+iPTY0Kf9MgQl1Brm+Zwj+6lBaqpc55d9HKw0oHElcM+hme3aR
+	cKh1mjuMkpXvTkTA/APZDfR7SbX0wVfgIKXbomOx7J1+pPxcrYpLTPu61C04IDhWzRxQsIr
+X-Google-Smtp-Source: AGHT+IGA4cVyTo8LR9uapfCa/GBnevFmRRRbbBsBBNtlOM/6qKvLohTl2qx89cx9phpbzHYddyTe7oOFg7Dlaiqca/s=
+X-Received: by 2002:a05:690c:3510:b0:787:cad1:bdbd with SMTP id
+ 00721157ae682-78a8b56b024mr239079967b3.65.1764300789279; Thu, 27 Nov 2025
+ 19:33:09 -0800 (PST)
+MIME-Version: 1.0
+From: Bryan Portillo <bryanportillodev@gmail.com>
+Date: Thu, 27 Nov 2025 21:32:57 -0600
+X-Gm-Features: AWmQ_bneo5UWxTZ8UVMvKX8yhpF53E2iT6h-pfsDyQY3f5s1cbboUHu4t6qfLRo
+Message-ID: <CABr40cFttyGRj1ypd6kYRnjdtRJGVjGTTmSyaoa51oEJp1MrWA@mail.gmail.com>
+Subject: More JSON Examples
+To: bportillo701@gmail.com
+Content-Type: multipart/alternative; boundary="000000000000d26e1d06449f49b0"
+
+--000000000000d26e1d06449f49b0
+Content-Type: text/plain; charset="UTF-8"
+
+Hi there,
+
+You can find additional JSON examples at the following link:
+JSON Dummy Data Examples
+<https://microsoftedge.github.io/Demos/json-dummy-data/>
+
+Feel free to check them out and let me know if you have any questions.
+
+Best regards,
+Bryan
+
+--000000000000d26e1d06449f49b0
+Content-Type: text/html; charset="UTF-8"
+
+<div dir="ltr"><p>Hi there,</p>
+<p>You can find additional JSON examples at the following link:<br>
+<a class="gmail-decorated-link" rel="noopener" href="https://microsoftedge.github.io/Demos/json-dummy-data/">JSON Dummy Data Examples<span aria-hidden="true" class="gmail-ms-0.5 gmail-inline-block gmail-align-middle gmail-leading-none"></span></a></p>
+<p>Feel free to check them out and let me know if you have any questions.</p>
+<p>Best regards,<br>
+Bryan</p></div>
+
+--000000000000d26e1d06449f49b0--

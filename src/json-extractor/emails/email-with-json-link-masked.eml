@@ -1,0 +1,104 @@
+Delivered-To: bportillo701@gmail.com
+Received: by 2002:a05:6a11:fb0d:b0:690:12cf:8b4f with SMTP id id13csp4626705pxc;
+        Thu, 27 Nov 2025 19:31:49 -0800 (PST)
+X-Received: by 2002:a05:690e:1584:10b0:63f:cb73:100a with SMTP id 956f58d0204a3-6432924c139mr8487615d50.24.1764300708966;
+        Thu, 27 Nov 2025 19:31:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1764300708; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZyVP4bRoWNmD09b9byAm5KBVlNiN2ipY1slJefRIfTaRxFvKEvkO0HqiCh6cbKCTR3
+         LRGNH/ae9JsZKZWKoYij41AyQMhABTOsrtv7C17H7yJB3nbvyTKY1GhgqDiit2XXF7WT
+         WdcL4mYuPNMZWESqseewPqq6yMFxP/1p2q/STa1G2ISobYjJkTxAwfk12WyYXmGuxhlF
+         ref4KpSqe8yJk6NNV9+g5FcAtqexDWeWpC7nxhqKlRw379epzYnPu84VVNb2t470cMA+
+         CKXuLNMG1yFZGSHe5UtPsW267hf+ZZ+O+waykKsYrgv/iZIBhmAmuAilqdEw6oEmBZe6
+         RHDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=+mBvRtn2GkG7padzTFPqzxPsG/K8nhNdIMb+PA/255c=;
+        fh=9n0C+n+xWeCbTFyJySNdfZMwzd5BEl2gz/xFy5/Y9Lg=;
+        b=PS2qgIzyXpPfcIV5bhm+pA7SgES8MmhBWo15qS1H9DvgppKXs6vb8Uupdj6XSgAO+2
+         RFduaFQxc3pGgGVKQbc1+QH6BfR3zjgOyCJuWjwDSoTBYDIpicd/wA18MkaHMsxn1jtk
+         I4FB52uop2bnkJAYz2ci9FTbokrp0EM+PcIhDX27b7j86QW9XmoZPFnJ3Qws0bkGwlJ4
+         P37+hvQvPg1xyGheDB+PBLWBVt68UOwnPtLXqmyoWHRwLvWRSTOZuOqyvlenc5WUjNH4
+         NIgNXk5WV540/zSsCnmgiGssjhqp4yxWMT6TQ9PuNKk3dSK3HgjTSNM0u9q0AHAOyDM6
+         yugA==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20230601 header.b=XGZAw2TQ;
+       spf=pass (google.com: domain of bryanportillodev@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=bryanportillodev@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+Return-Path: <bryanportillodev@gmail.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id 00721157ae682-78ad1049286sor11852867b3.17.2025.11.27.19.31.48
+        for <bportillo701@gmail.com>
+        (Google Transport Security);
+        Thu, 27 Nov 2025 19:31:48 -0800 (PST)
+Received-SPF: pass (google.com: domain of bryanportillodev@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20230601 header.b=XGZAw2TQ;
+       spf=pass (google.com: domain of bryanportillodev@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=bryanportillodev@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764300708; x=1764905508; dara=google.com;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+mBvRtn2GkG7padzTFPqzxPsG/K8nhNdIMb+PA/255c=;
+        b=XGZAw2TQ/f8raX2910lN0N9JJJe07msSRV9KMnNzDrEBig3DVUZ5ozcEpRc1fTeqgZ
+         ISYPg4yXM2H0TnO1oDVXH8+VdmanebHk1JqYyEE5/koQErxAG0RXA3bYx2VLOx4opoAT
+         RJ3ewcGcfy/GhkzefDMKZhyeSfRpj7YwWYeycviByDxHTEffw2zsub4ySee9HKuGGxyq
+         UxNPrXzPmgaI0m659DEZ/dv4TyxHAcKT4lb0TvMrhHf3/X3Kp1RcZVh0SC2Rbezt0bli
+         mLG7uk613WY+trrlBoR79boODWUggZDVX3s4kPRkQNyYy9F0GcDgCa2gSX1bLXaNu/7Y
+         0VSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764300708; x=1764905508;
+        h=to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+mBvRtn2GkG7padzTFPqzxPsG/K8nhNdIMb+PA/255c=;
+        b=wNasCWc2MrX+KK0dRIzIHl93zrf2rqOeLIN+2QRxKll3fOMitR7QtfYF7mXnXUoCJU
+         AODMAbEmsVrzqvsnIBDeb3wq2s4j2g/f3K8V9tay3iVkubEHxmw4a04PnAotOguZFI0+
+         XKu3Oq7jyyGiJUjSbwKX2pKjyNIMhSWOSPeEom3kARZgmeQFUchvroRf+wmsR1gBFKuO
+         0Ot+v1zJKzzsVA5bonW2SxHI0851ekGg7eW3tgfswGl3R7RxI8Y2lje2SLVp8JYGrefN
+         Od+siS7NnLnKI9vVqlVx081ZASP/iXtKQsJCcsXb+kDAaYc7MV3OJ1G/wcjTNwUWBvUy
+         veMQ==
+X-Gm-Message-State: AOJu0YzPuz9v6HzG1pwBhZkGCEXZnps4e0N2XavRtk24VTA6CSaObyJ0
+	QMLb4Zc1N2Ypp4Y3BimAhWyVaZP00svKT+ZYlyFQAqNQCEXEkBKDsvdi+c6N6yi5flPJ73YH0KB
+	V4yd4Uibku3AcS4x9bJRi29LHJLUHrDYvTXF5
+X-Gm-Gg: ASbGncs3m/7xvqLYnXvH9dqXmOv3Babktvkx+uxMgiQHTKXW+h9WDhcoK0wEJFwyI4E
+	20EA8zPYxGS6tRm9X/9aWtZvkfCTmPl+VEfuC7tN3dQcUxsqx2jdIv2XWVgiRRBwt+LPtjMObTt
+	eXOxBphcp5NHY87CH2WpDBPDgpFkWpec1dgcN5YktQbuzp24zeDXSXn/XJQsZVWxo/z3wuumXMT
+	N3brfQMYmOY17NcfcLUXKTDdQ0uavGeepMwvp3PUsh7Rj9B/otKshdZvexwX9b53rnuUYXI
+X-Google-Smtp-Source: AGHT+IF4nLuB4fNDn8SX+a8YsOIaKrju1ucMiN6WBucypS4HL2g4w2w+Fbmp4O+QuwtSV4EBqinCa2NK2+hFp2qkhTw=
+X-Received: by 2002:a05:690c:3349:b0:787:fbe3:fc6a with SMTP id
+ 00721157ae682-78ab6f6ec1fmr130456917b3.52.1764300708441; Thu, 27 Nov 2025
+ 19:31:48 -0800 (PST)
+MIME-Version: 1.0
+From: Bryan Portillo <bryanportillodev@gmail.com>
+Date: Thu, 27 Nov 2025 21:31:37 -0600
+X-Gm-Features: AWmQ_bnlG_kGHk0iJMKvPM2VuAmmCgtJt-Tl1KPvf-zPTBtfg7FJKF6hk1U88Xw
+Message-ID: <CABr40cF3=XTM-YaSj5nKLKy4-vr3kw0mWd1pyD8O5-9KpKqo=A@mail.gmail.com>
+Subject: JSON Data Link
+To: bportillo701@gmail.com
+Content-Type: multipart/alternative; boundary="00000000000000f35506449f4593"
+
+--00000000000000f35506449f4593
+Content-Type: text/plain; charset="UTF-8"
+
+Hi there,
+
+You can access the JSON data using the following link:
+JSON Data
+<https://gist.githubusercontent.com/mshafrir/2646763/raw/states_hash.json>
+
+Please let me know if you have any questions.
+
+Best regards,
+Bryan
+
+--00000000000000f35506449f4593
+Content-Type: text/html; charset="UTF-8"
+
+<div dir="ltr"><p>Hi there,</p><p>You can access the JSON data using the following link:<br>
+<a rel="noopener" class="gmail-decorated-link" href="https://gist.githubusercontent.com/mshafrir/2646763/raw/states_hash.json">JSON Data</a></p><p>Please let me know if you have any questions.</p><p>Best regards,<br>Bryan</p></div>
+
+--00000000000000f35506449f4593--
