@@ -1,6 +1,8 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JsonExtractorService } from './services/json-extractor.service';
+import { ParseEmailDto } from './dto/parse-email.dto';
+import { MappedSesEvent } from 'src/event-mapper/dto/response-event-mapper.dto';
 
 @ApiTags('JSON Extractor')
 @Controller('json-extractor')
@@ -12,23 +14,14 @@ export class JsonExtractorController {
     summary: 'Parse email file',
     description: 'Extracts JSON content from a specified email file',
   })
-  @ApiQuery({
-    name: 'file',
-    required: true,
-    type: String,
-    description: 'The name of the email file to parse',
-  })
   @ApiResponse({
     status: 200,
     description: 'Successful response',
-    schema: {
-      type: 'object',
-      description: 'The extracted JSON content from the email file',
-    },
+    type: MappedSesEvent,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
-  parseEmail(@Query('file') query: string) {
-    return this.jsonExtractorService.parseEmail(query);
+  parseEmail(@Query() query: ParseEmailDto) {
+    return this.jsonExtractorService.parseEmail(query.file);
   }
 }
