@@ -1,81 +1,105 @@
 import * as fs from 'fs/promises';
 import path from 'path';
 
-import {
-  BadRequestException,
-  HttpException,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { simpleParser } from 'mailparser';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { ParsedMail, simpleParser } from 'mailparser';
 import * as cheerio from 'cheerio';
 
-// Interface for JSON attachment content
-export interface JsonAttachmentContent {
-  [key: string]: unknown;
-}
+import { JsonAttachmentContent } from '../interfaces/response.interface';
+import { errorHandler } from 'src/common/error/error-handler';
+import { HttpClient } from 'src/common/http/http-client';
 
 @Injectable()
 export class EmailParserService {
-  private readonly logger = new Logger(EmailParserService.name);
+  constructor(private readonly httpClient: HttpClient) {}
 
-  constructor(private readonly httpService: HttpService) {}
-
-  async parse(fileName: string) {
+  async parseEmailAndGetJson(fileName: string) {
     try {
       const file = await this.openFile(fileName);
       const parsedEmail = await simpleParser(file);
 
-      console.log(JSON.stringify(parsedEmail));
-
       // Case 1 - Look for JSON attachments
-      for (const attachment of parsedEmail.attachments) {
-        if (attachment && attachment.filename) {
-          if (attachment.filename.endsWith('.json')) {
-            const parsedContent = JSON.parse(
-              attachment.content.toString(),
-            ) as JsonAttachmentContent;
-            return parsedContent;
-          }
-        }
+      const jsonFromAttachment = this.getJsonFromAttachments(parsedEmail);
+      if (jsonFromAttachment) {
+        return jsonFromAttachment;
       }
-      this.logger.log('No JSON attachment found in the email');
 
       // Case 2 - Inside the body of the email as a link
+      const jsonFromBody = await this.getJsonFromEmailBody(parsedEmail);
+      if (jsonFromBody) {
+        return jsonFromBody;
+      }
 
+      // Case 3 - Inside the body of the email as a link that leads to a webpage where there is a link that leads to the actual JSON
+      const jsonFromExternalPage =
+        await this.getJsonFromEmailLinkToExternalPage(parsedEmail);
+      if (jsonFromExternalPage) {
+        return jsonFromExternalPage;
+      }
+
+      throw new BadRequestException('No JSON content found in the email');
+    } catch (error) {
+      errorHandler('Error in parseEmailAndGetJson', this.logger, error);
+    }
+  }
+
+  private readonly logger = new Logger(EmailParserService.name);
+
+  private async openFile(fileName: string) {
+    try {
+      const emailPath = path.join(
+        process.cwd(),
+        'src/json-extractor/emails',
+        fileName,
+      );
+
+      const file = await fs.readFile(emailPath);
+
+      return file;
+    } catch (error) {
+      this.logger.error('Error reading file:', error);
+      throw new BadRequestException('Could not read the specified file');
+    }
+  }
+
+  private getJsonFromAttachments(parsedEmail: ParsedMail) {
+    for (const attachment of parsedEmail.attachments) {
+      if (attachment && attachment.filename) {
+        if (attachment.filename.endsWith('.json')) {
+          const parsedContent = JSON.parse(
+            attachment.content.toString(),
+          ) as JsonAttachmentContent;
+          return parsedContent;
+        }
+      }
+    }
+  }
+
+  private async getJsonFromEmailBody(parsedEmail: ParsedMail) {
+    try {
       const jsonUrlRegex = /https?:\/\/[^\s]+?\.json\b/;
       const bodyText = parsedEmail.text || '';
       const match = bodyText.match(jsonUrlRegex);
 
       if (match && match[0]) {
         const jsonUrl = match[0];
-        this.logger.log(`Found JSON URL: ${jsonUrl}`);
-
-        const fetchedJson = await this.httpService.axiosRef.get(jsonUrl);
-
-        if (fetchedJson.status !== 200) {
-          throw new BadRequestException(
-            `Failed to fetch JSON from URL: ${jsonUrl}`,
-          );
-        }
+        const fetchedJson = await this.httpClient.get(jsonUrl);
 
         return fetchedJson.data as JsonAttachmentContent;
-      } else {
-        this.logger.log('No JSON link found in the email body');
       }
+    } catch (error) {
+      errorHandler('Error in getJsonFromEmailBody', this.logger, error);
+    }
+  }
 
-      // Case 3 - Inside the body of the email as a link that leads to a webpage where there is a link
-      // that leads to the actual JSON
-
+  private async getJsonFromEmailLinkToExternalPage(parsedEmail: ParsedMail) {
+    try {
       const webpageUrlRegex = /https?:\/\/[^\s<>"]+/;
-      const bodyText1 = parsedEmail.text || '';
-      const match1 = bodyText1.match(webpageUrlRegex);
+      const bodyText = parsedEmail.text || '';
+      const match = bodyText.match(webpageUrlRegex);
 
-      if (match1 && match1[0]) {
-        const webUrl = match1[0];
-        this.logger.log(`Found Web URL: ${webUrl}`);
-
+      if (match && match[0]) {
+        const webUrl = match[0];
         const $ = await this.loadPage(webUrl);
         const results: { href: string }[] = [];
 
@@ -91,58 +115,35 @@ export class EmailParserService {
         });
 
         if (results.length === 0) {
-          this.logger.log('No JSON link found on the webpage');
           throw new BadRequestException(
-            'No JSON content found in the redirected page.',
+            'The redirected page does not contain any JSON links',
           );
         }
         // taking the first link that ends with .json
-
-        const fetchedJson = await this.httpService.axiosRef.get(
-          results[0].href,
-        );
-
-        if (fetchedJson.status !== 200) {
-          throw new BadRequestException(
-            `Failed to fetch JSON from URL: ${results[0].href}`,
-          );
-        }
+        const fetchedJson = await this.httpClient.get(results[0].href);
 
         return fetchedJson.data as JsonAttachmentContent;
       }
-
-      this.logger.log('No link found in the email body');
-
-      throw new BadRequestException('No JSON content found in the email.');
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      this.logger.error('Error parsing email:', error);
-    }
-  }
-
-  private async openFile(fileName: string) {
-    try {
-      const emailPath = path.join(
-        process.cwd(),
-        'src/json-extractor/emails',
-        fileName,
+    } catch (error: any) {
+      errorHandler(
+        'Error in getJsonFromEmailLinkToExternalPage',
+        this.logger,
+        error,
       );
-
-      const file = await fs.readFile(emailPath);
-
-      return file;
-    } catch (error) {
-      this.logger.error('Error reading file:', error);
-      throw new BadRequestException('Could not read the specified file.');
     }
   }
 
-  async loadPage(url: string) {
-    const response = await this.httpService.axiosRef.get<string>(url);
-    const data = response.data;
+  private async loadPage(url: string) {
+    try {
+      const response = await this.httpClient.get(url);
+      const data = response.data as string;
 
-    const $ = cheerio.load(data);
+      // Load the HTML into cheerio
+      const $ = cheerio.load(data);
 
-    return $;
+      return $;
+    } catch (error) {
+      return errorHandler('Error in loadPage', this.logger, error);
+    }
   }
 }

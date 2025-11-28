@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 
-import { JsonExtractorService } from './json-extractor.service';
+import { JsonExtractorService } from './services/json-extractor.service';
 
 @Controller('json-extractor')
 export class JsonExtractorController {
