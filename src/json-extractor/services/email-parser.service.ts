@@ -6,8 +6,8 @@ import { ParsedMail, simpleParser } from 'mailparser';
 import * as cheerio from 'cheerio';
 
 import { JsonAttachmentContent } from '../interfaces/response.interface';
-import { errorHandler } from 'src/common/error/error-handler';
-import { HttpClient } from 'src/common/http/http-client';
+import { errorHandler } from '../../common/error/error-handler';
+import { HttpClient } from '../../common/http/http-client';
 
 @Injectable()
 export class EmailParserService {
