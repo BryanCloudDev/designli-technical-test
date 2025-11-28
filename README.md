@@ -30,17 +30,39 @@ This NestJS application provides two main functionalities:
 
 ## Project Setup
 
-To set up the project, follow these steps:
+Follow the steps below to set up the environment.
+
+### 1. Clone the repository
 
 ```bash
-# Clone the repository
-$ git clone https://github.com/BryanCloudDev/designli-technical-test.git
+git clone https://github.com/BryanCloudDev/designli-technical-test.git
+cd designli-technical-test
+```
 
-# Navigate to the project directory
-$ cd designli-technical-test
+### 2. Install Node.js (Required)
 
-# Install dependencies
-$ npm install
+This project requires **Node.js v22.x**.
+
+You can install it using one of the following methods:
+
+#### **Using nvm (recommended):**
+
+```bash
+nvm install 22
+nvm use 22
+```
+
+#### **Download directly from Node.js:**
+
+Node v22 releases:
+[https://nodejs.org/en/blog/release/v22.0.0](https://nodejs.org/en/blog/release/v22.0.0)
+
+⚠️ *Using Node 23 or unsupported versions may trigger engine warnings or cause Jest to fail.*
+
+### 3. Install dependencies
+
+```bash
+npm install
 ```
 
 ## Running the Application
@@ -108,5 +130,4 @@ $ npm run test:cov
 ## Additional Information
 
 - The application uses Swagger for API documentation. You can access the Swagger UI at `/api` when the application is running.
-- For more detailed information about the NestJS framework, visit the [NestJS Documentation](https://docs.nestjs.com).
 - A comprehensive Postman documentation for the API endpoints is available at [Postman Documentation](https://documenter.getpostman.com/view/15984313/2sB3dLTB7t).
