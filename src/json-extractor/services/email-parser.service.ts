@@ -13,7 +13,21 @@ import { HttpClient } from 'src/common/http/http-client';
 export class EmailParserService {
   constructor(private readonly httpClient: HttpClient) {}
 
-  async parseEmailAndGetJson(fileName: string) {
+  /**
+   * Parses an email file and retrieves JSON content from it.
+   *
+   * The function handles three scenarios:
+   * 1. JSON as an attachment.
+   * 2. JSON linked directly in the email body.
+   * 3. JSON linked on an external webpage linked from the email body.
+   *
+   * @param {string} fileName - The name of the email file to parse (located in src/json-extractor/emails).
+   * @returns {Promise<JsonAttachmentContent>} The parsed JSON content from the email.
+   * @throws {BadRequestException} If no JSON content is found or the file cannot be read.
+   */
+  async parseEmailAndGetJson(
+    fileName: string,
+  ): Promise<JsonAttachmentContent | undefined> {
     try {
       const file = await this.openFile(fileName);
       const parsedEmail = await simpleParser(file);
@@ -45,7 +59,14 @@ export class EmailParserService {
 
   private readonly logger = new Logger(EmailParserService.name);
 
-  private async openFile(fileName: string) {
+  /**
+   * Reads an email file from the local filesystem.
+   *
+   * @param {string} fileName - The name of the email file to read.
+   * @returns {Promise<Buffer>} The raw content of the email file.
+   * @throws {BadRequestException} If the file cannot be read.
+   */
+  private async openFile(fileName: string): Promise<Buffer> {
     try {
       const emailPath = path.join(
         process.cwd(),
@@ -62,7 +83,15 @@ export class EmailParserService {
     }
   }
 
-  private getJsonFromAttachments(parsedEmail: ParsedMail) {
+  /**
+   * Extracts JSON content from the attachments of a parsed email.
+   *
+   * @param {ParsedMail} parsedEmail - The parsed email object.
+   * @returns {JsonAttachmentContent | undefined} The parsed JSON from the attachment, if found.
+   */
+  private getJsonFromAttachments(
+    parsedEmail: ParsedMail,
+  ): JsonAttachmentContent | undefined {
     for (const attachment of parsedEmail.attachments) {
       if (attachment && attachment.filename) {
         if (attachment.filename.endsWith('.json')) {
@@ -75,7 +104,15 @@ export class EmailParserService {
     }
   }
 
-  private async getJsonFromEmailBody(parsedEmail: ParsedMail) {
+  /**
+   * Extracts JSON content from a direct link inside the email body.
+   *
+   * @param {ParsedMail} parsedEmail - The parsed email object.
+   * @returns {Promise<JsonAttachmentContent | undefined>} The JSON content fetched from the link, if found.
+   */
+  private async getJsonFromEmailBody(
+    parsedEmail: ParsedMail,
+  ): Promise<JsonAttachmentContent | undefined> {
     try {
       const jsonUrlRegex = /https?:\/\/[^\s]+?\.json\b/;
       const bodyText = parsedEmail.text || '';
@@ -92,7 +129,16 @@ export class EmailParserService {
     }
   }
 
-  private async getJsonFromEmailLinkToExternalPage(parsedEmail: ParsedMail) {
+  /**
+   * Extracts JSON content from a webpage linked in the email body, where the page contains a link to the JSON file.
+   *
+   * @param {ParsedMail} parsedEmail - The parsed email object.
+   * @returns {Promise<JsonAttachmentContent | undefined>} The JSON content fetched from the external page, if found.
+   * @throws {BadRequestException} If the webpage does not contain any JSON links.
+   */
+  private async getJsonFromEmailLinkToExternalPage(
+    parsedEmail: ParsedMail,
+  ): Promise<JsonAttachmentContent | undefined> {
     try {
       const webpageUrlRegex = /https?:\/\/[^\s<>"]+/;
       const bodyText = parsedEmail.text || '';
@@ -133,7 +179,13 @@ export class EmailParserService {
     }
   }
 
-  private async loadPage(url: string) {
+  /**
+   * Loads a webpage and returns a Cheerio instance for DOM manipulation.
+   *
+   * @param {string} url - The URL of the webpage to load.
+   * @returns {Promise<CheerioStatic>} A Cheerio instance loaded with the page HTML.
+   */
+  private async loadPage(url: string): Promise<cheerio.CheerioAPI> {
     try {
       const response = await this.httpClient.get(url);
       const data = response.data as string;

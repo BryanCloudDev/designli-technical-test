@@ -7,6 +7,25 @@ import { monthsOfYearMap } from '../helpers/date.helpers';
 
 @Injectable()
 export class EventProcessed {
+  /**
+   * Maps a SES event record to an array of simplified MappedSesEvent objects.
+   *
+   * For each record in the SES event:
+   * - Checks if the message passes spam, virus, and DNS (SPF, DKIM, DMARC) verifications.
+   * - Extracts the month of the email.
+   * - Determines if processing was delayed (> 1000 ms).
+   * - Extracts the sender (emisor) and recipients (receptor) usernames.
+   *
+   * @param {SesEventDto} sesRecord - The SES event DTO containing one or more email records.
+   * @returns {MappedSesEvent[]} An array of mapped SES events with simplified properties:
+   *  - spam: boolean indicating spam verdict
+   *  - virus: boolean indicating virus verdict
+   *  - dns: boolean indicating SPF, DKIM, and DMARC verification
+   *  - mes: string representing the month of the email
+   *  - retrasado: boolean indicating if processing was delayed
+   *  - emisor: string username of the sender
+   *  - receptor: string array of recipient usernames
+   */
   fromSesRecord(sesRecord: SesEventDto): MappedSesEvent[] {
     const mappedEvents: MappedSesEvent[] = [];
 
@@ -39,6 +58,12 @@ export class EventProcessed {
     return mappedEvents;
   }
 
+  /**
+   * Checks if the given verdict status is a PASS.
+   *
+   * @param {VerdictStatus} verdictStatus - The verdict status to check.
+   * @returns {boolean} - Returns true if the verdict status is PASS, otherwise false.
+   */
   private isVertictPass = (verdictStatus: VerdictStatus): boolean => {
     return verdictStatus === VerdictStatus.PASS;
   };

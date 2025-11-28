@@ -23,76 +23,90 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This NestJS application provides two main functionalities:
 
-## Project setup
+1. Event Mapper: Processes AWS SES inbound email events.
+2. JSON Extractor: Extracts JSON content from email files.
+
+## Project Setup
+
+To set up the project, follow these steps:
 
 ```bash
+# Clone the repository
+$ git clone https://github.com/BryanCloudDev/designli-technical-test.git
+
+# Navigate to the project directory
+$ cd designli-technical-test
+
+# Install dependencies
 $ npm install
 ```
 
-## Compile and run the project
+## Running the Application
+
+You can run the application in different modes:
 
 ```bash
-# development
+# Development mode
 $ npm run start
 
-# watch mode
+# Watch mode (auto-reload on file changes)
 $ npm run start:dev
 
-# production mode
+# Production mode
 $ npm run start:prod
 ```
 
-## Run tests
+The app will run by default in port `3000`, the app can be cheked in `http://localhost:3000/api`
+
+## Building the Application
+
+To build the application for production:
 
 ```bash
-# unit tests
+$ npm run build
+```
+
+This will create a `dist` folder with the compiled JavaScript files.
+
+## Running Tests
+
+The project includes various test scripts:
+
+```bash
+# Run unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
+# Generate test coverage report
 $ npm run test:cov
 ```
 
-## Deployment
+## Controllers
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Event Mapper Controller
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- **Endpoint**: POST `/event-mapper`
+- **Functionality**: Maps and processes an AWS SES inbound email event.
+- **Input**: Receives an SES inbound email event (SNS-style payload) in the request body.
+- **Output**: Returns a mapped or transformed structure of the event.
+- **Response Codes**:
+  - 200: Event processed successfully
+  - 400: Validation failed for the provided SES event payload
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+### JSON Extractor Controller
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+- **Endpoint**: GET `/json-extractor`
+- **Functionality**: Extracts JSON content from a specified email file.
+- **Input**: Requires a `file` query parameter specifying the name of the email file to parse (samples have been added to the postman documentation, the files are already loaded in `src/json-extractor/emails`).
+- **Output**: Returns the extracted JSON content from the email file.
+- **Response Codes**:
+  - 200: Successful response with extracted JSON
+  - 400: Bad request
+  - 500: Internal server error
 
-## Resources
+## Additional Information
 
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- The application uses Swagger for API documentation. You can access the Swagger UI at `/api` when the application is running.
+- For more detailed information about the NestJS framework, visit the [NestJS Documentation](https://docs.nestjs.com).
+- A comprehensive Postman documentation for the API endpoints is available at [Postman Documentation](https://documenter.getpostman.com/view/15984313/2sB3dLTB7t).

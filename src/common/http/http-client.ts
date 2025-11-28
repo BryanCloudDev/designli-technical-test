@@ -7,6 +7,13 @@ export class HttpClient {
 
   private readonly logger = new Logger(HttpClient.name);
 
+  /**
+   * Performs a GET request to the specified URL.
+   *
+   * @param {string} url - The URL to send the GET request to.
+   * @returns {Promise<any>} The response data from the GET request.
+   * @throws {BadRequestException} If the request fails or Axios returns an error.
+   */
   async get(url: string): Promise<any> {
     try {
       return await this.httpService.axiosRef.get(url);
@@ -15,6 +22,17 @@ export class HttpClient {
     }
   }
 
+  /**
+   * Handles errors from Axios GET requests.
+   *
+   * Logs the error and throws a BadRequestException with details if it's an Axios error,
+   * otherwise throws a generic BadRequestException.
+   *
+   * @param {any} error - The error object caught from the Axios request.
+   * @param {string} url - The URL that was being accessed when the error occurred.
+   * @throws {BadRequestException} Always throws an exception describing the failure.
+   * @returns {never} This function never returns; it always throws an exception.
+   */
   private handleAxiosError(error: any, url: string): never {
     this.logger.error(`Axios error while loading: ${url}`, error.message);
 

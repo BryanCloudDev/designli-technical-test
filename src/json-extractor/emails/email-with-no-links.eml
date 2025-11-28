@@ -1,0 +1,138 @@
+Delivered-To: bportillo701@gmail.com
+Received: by 2002:a05:6a11:fb0d:b0:690:12cf:8b4f with SMTP id id13csp4643737pxc;
+        Thu, 27 Nov 2025 20:17:22 -0800 (PST)
+X-Received: by 2002:a05:690e:1189:b0:63f:af0f:aaf with SMTP id 956f58d0204a3-64302592de6mr18542932d50.1.1764303441958;
+        Thu, 27 Nov 2025 20:17:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1764303441; cv=none;
+        d=google.com; s=arc-20240605;
+        b=RBkCmDI5BJB2HEGMTPYqslGeyZOdR7r1mPoFCmXkExAlLefHtbHohG4oPnrvWHzzH2
+         SGIMn+sxVnEgtAcgbhhssNQt10r1xlv3jPr057RF4LS5nBwwoYPOPFmy4eTz/9HgtbMM
+         UmsKVeff1c1kS/HWQL2i2Fb9edFmWcSwUApz88TULLVq8atPmoUTSGquUOubMcdpJXR4
+         XQs72IIEttdlptl6RK/lupxhRG6VenvHzRU+ObxobkKjUXp78LJe9DrbDJGlYTGqQzgC
+         +AReYaaWz7ZS1gcZ9Wi+COXRcxZPADJov3pnbXUVJu0wnpeD4e4DkEwyKZ67EokPCg0v
+         yxSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=3YyLx4OAM6bgXb6rxcBWty0vhFSpMS2kBEZBB82SsWU=;
+        fh=9n0C+n+xWeCbTFyJySNdfZMwzd5BEl2gz/xFy5/Y9Lg=;
+        b=I55dP+5ScCI4ijnWkAbAYazZLnHhvCBNgmZH94RAWM6Ik3aqqtibcXUce3TngS5lZk
+         TgWxiuSqTkZQKClnrsLjMsluMeOV8rx3nkBYFm6+fEXUZDjQw6Xi99dAPheSZnBRY9sb
+         z4aO4tcY2jjIvhbpgZGPkDogLjI2SBPt9IfFkRm3oQ42gy3rNHrF88W1gOZdKLZooZZ3
+         C2ZgVLxrUhn+rQsGhXDUwWBmfQSaGHuLSwASBJqLkeKd58o99yhlfqGG3urG/B2ybYcl
+         GPv8WsInlpjVpljFMeWMPw83nrxNLZVs+d2gFtLo2q3YdGCFjuteFYRoptbTeQpW0e9B
+         OTww==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20230601 header.b=UUtXFQ+m;
+       spf=pass (google.com: domain of bryanportillodev@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=bryanportillodev@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+Return-Path: <bryanportillodev@gmail.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id 00721157ae682-78ad1037cf1sor16698987b3.7.2025.11.27.20.17.21
+        for <bportillo701@gmail.com>
+        (Google Transport Security);
+        Thu, 27 Nov 2025 20:17:21 -0800 (PST)
+Received-SPF: pass (google.com: domain of bryanportillodev@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20230601 header.b=UUtXFQ+m;
+       spf=pass (google.com: domain of bryanportillodev@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=bryanportillodev@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764303441; x=1764908241; dara=google.com;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=3YyLx4OAM6bgXb6rxcBWty0vhFSpMS2kBEZBB82SsWU=;
+        b=UUtXFQ+mL7Fkkyld/jyFecxuj+2W/y44IYdkC5P6wcOxdtjR2ogQnW6+CeQsmoVgwS
+         5DfKXPlX4Zeh0h+fcbu3xx+BVJwz34Wal/CtbcTod23dxHd+AHquDvVsQVS0Lq3pnyAb
+         lPdDbiaaEdJ8keCmfazfnmoveHGiHvCXdeXdL2i5HZ6qrs/9fejoSysBadmLyPv0PDEp
+         nCnsMwxtwKZyRJncD+P5YpTJ1Ot6bJy4DSweDVP/zuKYeSJP5UCdQOCVpMNWseODHuxw
+         fbbzVAphXo603Bg3ER9P8UqYbmIyIOFRmg2VprGEc+1p8CUdZsRFyiK3OOFH/YsDA+v+
+         qLfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764303441; x=1764908241;
+        h=to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3YyLx4OAM6bgXb6rxcBWty0vhFSpMS2kBEZBB82SsWU=;
+        b=Kq3m/mbYusmcOAdRQus5J7kr3A4eAoNkoS43JF1NIGgo/72vAcvIup9PjoAp+A0RVh
+         xFFFxVg5sUKFA+7+CCNOPhnBt25Y8rX42nohti5s4IlcduSLoNIixggudXT+lh7t3Aqo
+         +pCnPo/lYPoy3pfdHg7EdW51KQtzTtKmnrnztYu/oJom+xQXGbdrNhUfrWr17V66VEl0
+         najwVKKeYpBexwYL9OM/0ShDgu/Q5qjxpMOAwveXQGyQ5pTiZGTT4LMOFaCOf9ZP0kS8
+         1nQb+o3iVq+7hon/iIerfheXulOHQhziXvqgbJpnAZ3oy9GZqNDiP45zu6ZiFpRxEgAg
+         sf3A==
+X-Gm-Message-State: AOJu0YwHZdQBhxyz/fcoojyqqIubUgQp5WbpeId3z6dSD3q22GZ6/+Sj
+	P8K+/iimrnnLGGLZ7uE3ft0Ek08GLNtB6OZUx3liLyLRyoeaHfOG5wbO64jYLkJ3qT+J2SJAiom
+	+UJF+HgoD4xVN56XjJpKnR3w0Mzft837puAX6
+X-Gm-Gg: ASbGnctFjqkLXo7Xi2vQRzjk0NJW5VyKc7dgw6v0ESoORg/CEI1NUprbTFl4J+3MMWX
+	R2iroD6MvLVSOgziyYp0KrKcflt+sOBoUok5IEKWlwVFIxqwAB0797m/ymaFNGKrRsvtx5rGlaf
+	95jbm/J8DjcI51ZNc54wD5A8Hu+dgLF289X/751ptZ6fTN6YOh+bvSfo6kyScQWQK1Mk/otwOop
+	XKPja5gMCvw06Tt9+l2Q9yg1/VRyAJOYv+t1kjqNB0s5mKCgfAbjAdjBUNkMaOD2aklVajT
+X-Google-Smtp-Source: AGHT+IEdwQ07As0j36nqKpfpjYwTGP6u62/4Tp0vrddtF0aiXoB6KFh+ohmdSQGPy1e4W99xj1cYp9Tkt6QEogauO8E=
+X-Received: by 2002:a05:690c:e3e9:b0:788:2009:4045 with SMTP id
+ 00721157ae682-78a7b754e85mr242658747b3.0.1764303441333; Thu, 27 Nov 2025
+ 20:17:21 -0800 (PST)
+MIME-Version: 1.0
+From: Bryan Portillo <bryanportillodev@gmail.com>
+Date: Thu, 27 Nov 2025 22:17:10 -0600
+X-Gm-Features: AWmQ_bkOdqzK0x2WsGveTdZtWgu8lGziohpu7ZAawMTpjvhFzJmvs_Ws_nUSWKg
+Message-ID: <CABr40cEaPhVHorGXzavCKM+Vw2+7zu3j8bCjWYkD289_7rCf4w@mail.gmail.com>
+Subject: Project Update and Next Steps
+To: bportillo701@gmail.com
+Content-Type: multipart/alternative; boundary="000000000000e5934706449fe7e2"
+
+--000000000000e5934706449fe7e2
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Team,
+
+I hope this email finds you well. I wanted to give you a quick update on
+the current status of our project. Over the past week, we have completed
+the initial phase of development, including setting up the database,
+implementing the core APIs, and running the first round of unit tests.
+
+Looking ahead, the next steps involve integrating the frontend with the
+backend services, performing end-to-end testing, and preparing the
+documentation for deployment. Please make sure to review the code changes
+and provide feedback by the end of the week so that we can stay on track
+with our timeline.
+
+Additionally, if anyone encounters any blockers or issues, don=E2=80=99t he=
+sitate
+to reach out. It=E2=80=99s important that we communicate early to avoid del=
+ays.
+
+Thank you all for your hard work and dedication. I=E2=80=99m confident that=
+ if we
+keep this momentum, we=E2=80=99ll be able to deliver the project successful=
+ly and
+on time.
+
+Best regards,
+Bryan
+
+--000000000000e5934706449fe7e2
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><p>Hi Team,</p>
+<p>I hope this email finds you well. I wanted to give you a quick update on=
+ the current status of our project. Over the past week, we have completed t=
+he initial phase of development, including setting up the database, impleme=
+nting the core APIs, and running the first round of unit tests.</p>
+<p>Looking ahead, the next steps involve integrating the frontend with the =
+backend services, performing end-to-end testing, and preparing the document=
+ation for deployment. Please make sure to review the code changes and provi=
+de feedback by the end of the week so that we can stay on track with our ti=
+meline.</p>
+<p>Additionally, if anyone encounters any blockers or issues, don=E2=80=99t=
+ hesitate to reach out. It=E2=80=99s important that we communicate early to=
+ avoid delays.</p>
+<p>Thank you all for your hard work and dedication. I=E2=80=99m confident t=
+hat if we keep this momentum, we=E2=80=99ll be able to deliver the project =
+successfully and on time.</p>
+<p>Best regards,<br>
+Bryan</p></div>
+
+--000000000000e5934706449fe7e2--
